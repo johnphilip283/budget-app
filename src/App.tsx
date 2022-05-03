@@ -13,6 +13,7 @@ const App = () => {
   const getInfo = useCallback(async () => {
     const response = await fetch('/api/info', { method: 'POST' })
     if (!response.ok) {
+      console.log('HI! HELLO!' + response.url)
       dispatch({ type: 'SET_STATE', state: { backend: false } })
       return { paymentInitiation: false }
     }

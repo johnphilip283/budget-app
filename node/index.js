@@ -79,6 +79,8 @@ app.use(
 app.use(bodyParser.json());
 app.use(cors());
 
+app.get('/', (req, res) => res.send('Hello!'));
+
 app.post('/api/info', function (request, response, next) {
   response.json({
     item_id: ITEM_ID,
@@ -442,17 +444,20 @@ app.get('/api/payment', function (request, response, next) {
 });
 
 //TO-DO: This endpoint will be deprecated in the near future
-app.get('/api/income/verification/paystubs', function (request, response, next) {
-  Promise.resolve()
-  .then(async function () {
-    const paystubsGetResponse = await client.incomeVerificationPaystubsGet({
-      access_token: ACCESS_TOKEN
-    });
-    prettyPrintResponse(paystubsGetResponse);
-    response.json({ error: null, paystubs: paystubsGetResponse.data})
-  })
-  .catch(next);
-})
+app.get(
+  '/api/income/verification/paystubs',
+  function (request, response, next) {
+    Promise.resolve()
+      .then(async function () {
+        const paystubsGetResponse = await client.incomeVerificationPaystubsGet({
+          access_token: ACCESS_TOKEN,
+        });
+        prettyPrintResponse(paystubsGetResponse);
+        response.json({ error: null, paystubs: paystubsGetResponse.data });
+      })
+      .catch(next);
+  },
+);
 
 app.use('/api', function (error, request, response, next) {
   prettyPrintResponse(error.response);
