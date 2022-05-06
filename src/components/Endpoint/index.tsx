@@ -1,45 +1,49 @@
-import React, { useState } from "react";
-import Button from "plaid-threads/Button";
-import Note from "plaid-threads/Note";
+import React, { useState } from 'react'
+import Button from 'plaid-threads/Button'
+import Note from 'plaid-threads/Note'
 
-import Table from "../Table";
-import Error from "../Error";
-import { DataItem, Categories, ErrorDataItem, Data } from "../../dataUtilities";
+import Table from '../Table'
+import Error from '../Error'
+import { DataItem, Categories, ErrorDataItem, Data } from '../../dataUtilities'
 
-import styles from "./index.module.scss";
+import styles from './index.module.scss'
+
+import fetchProxy from '../../proxyUtil'
 
 interface Props {
-  endpoint: string;
-  name?: string;
-  categories: Array<Categories>;
-  schema: string;
-  description: string;
-  transformData: (arg: any) => Array<DataItem>;
+  endpoint: string
+  name?: string
+  categories: Array<Categories>
+  schema: string
+  description: string
+  transformData: (arg: any) => Array<DataItem>
 }
 
 const Endpoint = (props: Props) => {
-  const [showTable, setShowTable] = useState(false);
-  const [transformedData, setTransformedData] = useState<Data>([]);
-  const [pdf, setPdf] = useState<string | null>(null);
-  const [error, setError] = useState<ErrorDataItem | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [showTable, setShowTable] = useState(false)
+  const [transformedData, setTransformedData] = useState<Data>([])
+  const [pdf, setPdf] = useState<string | null>(null)
+  const [error, setError] = useState<ErrorDataItem | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   const getData = async () => {
-    setIsLoading(true);
-    const response = await fetch(`/api/${props.endpoint}`, { method: "GET" });
-    const data = await response.json();
+    setIsLoading(true)
+    const response = await fetchProxy(`/api/${props.endpoint}`, {
+      method: 'GET',
+    })
+    const data = await response.json()
     if (data.error != null) {
-      setError(data.error);
-      setIsLoading(false);
-      return;
+      setError(data.error)
+      setIsLoading(false)
+      return
     }
-    setTransformedData(props.transformData(data)); // transform data into proper format for each individual product
+    setTransformedData(props.transformData(data)) // transform data into proper format for each individual product
     if (data.pdf != null) {
-      setPdf(data.pdf);
+      setPdf(data.pdf)
     }
-    setShowTable(true);
-    setIsLoading(false);
-  };
+    setShowTable(true)
+    setIsLoading(false)
+  }
 
   return (
     <>
@@ -65,7 +69,7 @@ const Endpoint = (props: Props) => {
             className={styles.sendRequest}
             onClick={getData}
           >
-            {isLoading ? "Loading..." : `Send request`}
+            {isLoading ? 'Loading...' : `Send request`}
           </Button>
           {pdf != null && (
             <Button
@@ -74,7 +78,7 @@ const Endpoint = (props: Props) => {
               wide
               className={styles.pdf}
               href={`data:application/pdf;base64,${pdf}`}
-              componentProps={{ download: "Asset Report.pdf" }}
+              componentProps={{ download: 'Asset Report.pdf' }}
             >
               Download PDF
             </Button>
@@ -85,14 +89,14 @@ const Endpoint = (props: Props) => {
         <Table
           categories={props.categories}
           data={transformedData}
-          isIdentity={props.endpoint === "identity"}
+          isIdentity={props.endpoint === 'identity'}
         />
       )}
       {error != null && <Error error={error} />}
     </>
-  );
-};
+  )
+}
 
-Endpoint.displayName = "Endpoint";
+Endpoint.displayName = 'Endpoint'
 
-export default Endpoint;
+export default Endpoint

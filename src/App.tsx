@@ -6,17 +6,22 @@ import Items from './Components/ProductTypes/Items'
 import Context from './Context'
 
 import styles from './App.module.scss'
+import fetchProxy from './proxyUtil'
 
 const App = () => {
   const { linkSuccess, isItemAccess, dispatch } = useContext(Context)
 
   const getInfo = useCallback(async () => {
-    const response = await fetch('/api/info', { method: 'POST' })
+    let response = await fetchProxy('/api/info', { method: 'POST' })
     if (!response.ok) {
-      console.log(response)
+      // console.log(response)
       dispatch({ type: 'SET_STATE', state: { backend: false } })
       return { paymentInitiation: false }
     }
+    // console.log(response)
+    // if (!response.ok) {
+    //   console.log(response)
+    // }
     const data = await response.json()
     const paymentInitiation: boolean =
       data.products.includes('payment_initiation')
@@ -34,7 +39,7 @@ const App = () => {
       const path = paymentInitiation
         ? '/api/create_link_token_for_payment'
         : '/api/create_link_token'
-      const response = await fetch(path, {
+      const response = await fetchProxy(path, {
         method: 'POST',
       })
       if (!response.ok) {

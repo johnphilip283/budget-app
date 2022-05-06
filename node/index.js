@@ -79,8 +79,6 @@ app.use(
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get('/', (req, res) => res.send('Hello!'));
-
 app.post('/api/info', function (request, response, next) {
   console.log('potato');
   response.json({
@@ -222,7 +220,7 @@ app.get('/api/transactions', function (request, response, next) {
   Promise.resolve()
     .then(async function () {
       // Pull transactions for the Item for the last 30 days
-      const startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
+      const startDate = moment().subtract(180, 'days').format('YYYY-MM-DD');
       const endDate = moment().format('YYYY-MM-DD');
       const configs = {
         access_token: ACCESS_TOKEN,
