@@ -14,14 +14,9 @@ const App = () => {
   const getInfo = useCallback(async () => {
     let response = await fetchProxy('/api/info', { method: 'POST' })
     if (!response.ok) {
-      // console.log(response)
       dispatch({ type: 'SET_STATE', state: { backend: false } })
       return { paymentInitiation: false }
     }
-    // console.log(response)
-    // if (!response.ok) {
-    //   console.log(response)
-    // }
     const data = await response.json()
     const paymentInitiation: boolean =
       data.products.includes('payment_initiation')

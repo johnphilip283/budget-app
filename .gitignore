@@ -4,3 +4,6 @@ packages
 .webpack
 out
 .env
+.DS_Store
+.prettierrc
+.eslintignore

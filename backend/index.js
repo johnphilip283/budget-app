@@ -80,7 +80,6 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.post('/api/info', function (request, response, next) {
-  console.log('potato');
   response.json({
     item_id: ITEM_ID,
     access_token: ACCESS_TOKEN,
